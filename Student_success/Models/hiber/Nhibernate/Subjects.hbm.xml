@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true" assembly="student_success" namespace="Student_success.Models">
+  <class name="Subjects" table="Subjects" dynamic-update="true" >
+    <cache usage="read-write"/>
+    <id name="Id" column="Id" type="int">
+      <generator class="native" />
+    </id>
+    <property name="Name" />
+    <list name="GroupsSubjectses" cascade="all-delete-orphan">
+      <key column="SubjectsId"/>
+      <index column="Groups_SubjectIndex" />
+      <one-to-many class="Groups_Subjects"/>
+    </list>
+    <list name="Marks" cascade="all-delete-orphan">
+      <key column="SubjectsId"/>
+      <index column="MarkIndex" />
+      <one-to-many class="Marks"/>
+    </list>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,21 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true" assembly="student_success" namespace="Student_success.Models">
+  <class name="Groups" table="Groups" dynamic-update="true" >
+    <cache usage="read-write"/>
+    <id name="Id" column="Id" type="int">
+      <generator class="native" />
+    </id>
+    <property name="Name" />
+    <property name="CreatedDate" />
+    <list name="Students" cascade="all-delete-orphan">
+      <key column="GroupsId"/>
+      <index column="StudentIndex" />
+      <one-to-many class="Student"/>
+    </list>
+    <list name="GroupsSubjectses" cascade="all-delete-orphan">
+      <key column="GroupsId"/>
+      <index column="Groups_SubjectIndex"/>
+      <one-to-many class="Groups_Subjects"/>
+    </list>
+  </class>
+</hibernate-mapping>

@@ -1,0 +1,11 @@
+﻿<?xml version="1.0" encoding="utf-8" ?>
+<hibernate-mapping xmlns="urn:nhibernate-mapping-2.2" auto-import="true" assembly="student_success" namespace="Student_success.Models">
+  <class name="Groups_Subjects" table="Groups_Subjects" dynamic-update="true" >
+    <cache usage="read-write"/>
+    <id name="Id" column="Id" type="int">
+      <generator class="native" />
+    </id>
+    <many-to-one name="Groups" column="GroupsId" />
+    <many-to-one name="Subjects" column="SubjectsId" />
+  </class>
+</hibernate-mapping>
