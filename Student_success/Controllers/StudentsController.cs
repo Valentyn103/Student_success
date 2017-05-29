@@ -92,47 +92,52 @@ namespace Student_success.Controllers
             return File(new System.Text.UTF8Encoding().GetBytes(export), "text/csv", "Students.csv");
         }
         //Send SMS
-        public ActionResult SendSMS()
+        public ActionResult SendSMS(int? id)
         {
-            try
+            /*if (id == null)
             {
-                var myDictionary = new Dictionary<string, string>();
-                myDictionary["version"] = "3.0";
-                myDictionary["action"] = "addAddressbook";
-                myDictionary["key"] = "3aa244050f538934d1ada951587cb251";
-                myDictionary["name"] = "Testaddressbook";
-                myDictionary["description"] = "Testdescription";
-                var mylist = myDictionary.ToList();
-                mylist.Sort((pair1, pair2) => pair1.Key.CompareTo(pair2.Key));
-                string sum = "";
-                for (int i = 0; i < mylist.Count; i++)
-                    sum += mylist[i].Key;
-
-                sum += "e103c7e71d05d2188fa9df4aef2f2f60";
-                StringBuilder hash1 = new StringBuilder();
-                MD5CryptoServiceProvider md5provider = new MD5CryptoServiceProvider();
-                byte[] bytes = md5provider.ComputeHash(new UTF8Encoding().GetBytes(sum));
-
-                for (int i = 0; i < bytes.Length; i++)
-                    hash1.Append(bytes[i].ToString("x2"));
-                string res = hash1.ToString();
-
-                HttpWebRequest request = WebRequest
-                    .Create("http://api.atompark.com/api/sms/3.0/addAddressbook?key=3aa244050f538934d1ada951587cb251&sum=" + res + "&name=Testaddressbook&description=Testdescription") as HttpWebRequest;
-                request.Method = "Post";
-                WebResponse response = request.GetResponse();
-                Stream dataStream = response.GetResponseStream();
-                StreamReader reader = new StreamReader(dataStream);
-                string responseFromServer = reader.ReadToEnd();
-                reader.Close();
-                response.Close();
-                ViewData["mes"] = responseFromServer;
+                return new HttpStatusCodeResult(HttpStatusCode.BadRequest);
             }
-            catch (Exception e)
+            Student student = db.Students.Find(id);
+            if (student == null)
             {
-                Console.WriteLine(e.Message);
-                Console.ReadKey();
-            }
+                return HttpNotFound();
+            }*/
+
+
+            var myDictionary = new Dictionary<string, string>();
+            myDictionary["version"] = "3.0";
+            myDictionary["action"] = "addAddressbook";
+            myDictionary["key"] = "3aa244050f538934d1ada951587cb251";
+            myDictionary["name"] = "Testaddressbook";
+            myDictionary["description"] = "Testdescription";
+            var mylist = myDictionary.ToList();
+            mylist.Sort((pair1, pair2) => pair1.Key.CompareTo(pair2.Key));
+
+            string sum = "";
+            for (int i = 0; i < mylist.Count; i++)
+                sum += mylist[i].Key;
+            sum += "e103c7e71d05d2188fa9df4aef2f2f60";
+
+            StringBuilder hash1 = new StringBuilder();
+            MD5CryptoServiceProvider md5provider = new MD5CryptoServiceProvider();
+            byte[] bytes = md5provider.ComputeHash(new UTF8Encoding().GetBytes(sum));
+
+            for (int i = 0; i < bytes.Length; i++)
+                hash1.Append(bytes[i].ToString("x2"));
+            string res = hash1.ToString();
+
+            HttpWebRequest request = WebRequest
+                .Create("http://api.atompark.com/api/sms/3.0/addAddressbook?key=3aa244050f538934d1ada951587cb251&sum=" + res
+                + "&name=Testaddressbook&description=Testdescription") as HttpWebRequest;
+            request.Method = "Post";
+            WebResponse response = request.GetResponse();
+            Stream dataStream = response.GetResponseStream();
+            StreamReader reader = new StreamReader(dataStream);
+            string responseFromServer = reader.ReadToEnd();
+            ViewData["mes"] = responseFromServer;
+            reader.Close();
+            response.Close();
             return View();
         }
 
