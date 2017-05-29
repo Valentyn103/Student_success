@@ -1,23 +1,20 @@
 ﻿using System;
-using System.Collections;
 using System.Collections.Generic;
-using System.Data;
 using System.Data.Entity;
 using System.IO;
 using System.Linq;
 using System.Net;
+using System.Security.Cryptography;
 using System.Text;
 using System.Web;
 using System.Web.Mvc;
-using System.Web.UI.WebControls;
-using NHibernate.Mapping;
 using Student_success.Models;
 
 namespace Student_success.Controllers
 {
     public class StudentsController : Controller
     {
-        private Model1 db = new Model1();
+        private Model1 db = new Model1(); //With db, we can work with the database
 
         // GET: Students
         public ActionResult Index()
@@ -40,25 +37,25 @@ namespace Student_success.Controllers
             }
             return View(student);
         }
-
+        //Page with info for import
         public ActionResult Import()
         {
             return View();
         }
 
-
+        //Import data from file
         [HttpPost]
         public ActionResult Import(HttpPostedFileBase file, bool reBuild)
         {
             if (file.ContentLength > 0)
             {
-                
+
                 BinaryReader b = new BinaryReader(file.InputStream);
-                byte[] binData = b.ReadBytes((int) file.InputStream.Length);
+                byte[] binData = b.ReadBytes((int)file.InputStream.Length);
                 string result = Encoding.Default.GetString(binData);
 
-                string[]results =  result.Split(new string[] { "\r\n" }, StringSplitOptions.None);
-                for (int i = 0; i < results.Length-1; i++)
+                string[] results = result.Split(new string[] { "\r\n" }, StringSplitOptions.None);
+                for (int i = 0; i < results.Length - 1; i++)
                 {
                     string[] parse = results[i].Split(',');
                     string tmp = parse[0];
@@ -77,28 +74,59 @@ namespace Student_success.Controllers
                     var marks = from c in db.Marks select c;
                     db.Marks.RemoveRange(marks);
                     db.Students.RemoveRange(students);
-                    db.SaveChanges();
                 }
                 db.SaveChanges();
             }
             return RedirectToAction("Index");
         }
-
+        //Export data to file
+        public FileContentResult Export()
+        {
+            string export = "";
+            var students = db.Students.ToList();
+            for (int i = 0; i < students.Count; i++)
+            {
+                export += students[i].Group.Name + ',' + students[i].Name + ',' + students[i].Surname
+                    + ',' + students[i].Email + ',' + students[i].Number + "\r\n";
+            }
+            return File(new System.Text.UTF8Encoding().GetBytes(export), "text/csv", "Students.csv");
+        }
+        //Send SMS
         public ActionResult SendSMS()
         {
             try
             {
+                var myDictionary = new Dictionary<string, string>();
+                myDictionary["version"] = "3.0";
+                myDictionary["action"] = "addAddressbook";
+                myDictionary["key"] = "3aa244050f538934d1ada951587cb251";
+                myDictionary["name"] = "Testaddressbook";
+                myDictionary["description"] = "Testdescription";
+                var mylist = myDictionary.ToList();
+                mylist.Sort((pair1, pair2) => pair1.Key.CompareTo(pair2.Key));
+                string sum = "";
+                for (int i = 0; i < mylist.Count; i++)
+                    sum += mylist[i].Key;
+
+                sum += "e103c7e71d05d2188fa9df4aef2f2f60";
+                StringBuilder hash1 = new StringBuilder();
+                MD5CryptoServiceProvider md5provider = new MD5CryptoServiceProvider();
+                byte[] bytes = md5provider.ComputeHash(new UTF8Encoding().GetBytes(sum));
+
+                for (int i = 0; i < bytes.Length; i++)
+                    hash1.Append(bytes[i].ToString("x2"));
+                string res = hash1.ToString();
+
                 HttpWebRequest request = WebRequest
-                    .Create("http://api.atompark.com/api/sms/3.0/getUserBalance?key=3aa244050f538934d1ada951587cb251&sum=control_sum&cy=UAH") as HttpWebRequest;
+                    .Create("http://api.atompark.com/api/sms/3.0/addAddressbook?key=3aa244050f538934d1ada951587cb251&sum=" + res + "&name=Testaddressbook&description=Testdescription") as HttpWebRequest;
                 request.Method = "Post";
                 WebResponse response = request.GetResponse();
-                Console.WriteLine(((HttpWebResponse)response).StatusDescription);
                 Stream dataStream = response.GetResponseStream();
                 StreamReader reader = new StreamReader(dataStream);
                 string responseFromServer = reader.ReadToEnd();
-                Console.WriteLine(responseFromServer);
                 reader.Close();
                 response.Close();
+                ViewData["mes"] = responseFromServer;
             }
             catch (Exception e)
             {
@@ -202,3 +230,4 @@ namespace Student_success.Controllers
         }
     }
 }
+

@@ -16,7 +16,16 @@
         <h4>Student</h4>
         <hr />
         @Html.ValidationSummary(true, "", new { @class = "text-danger" })
-
+        
+        
+        <div class="form-group">
+            <label class="control-label col-md-2">Sample data for import .csv</label>
+            <div class="col-md-10">
+                <p>PM-11,Valentyn,Zolotarov,zolotarov103@gmail.com,+380676076086<br />
+                    PM-11,Ivan,Petrenko,newemail@gmail.com,+3804567896548
+                </p>
+            </div>
+        </div>
         <div class="form-group">
             <label class="control-label col-md-2">File</label>
             <div class="col-md-10">
