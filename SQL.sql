@@ -36,17 +36,23 @@ create table Marks
 	, MarkDate datetime
 	, Mark int
 )
-
+create table Messages
+(
+	Id int identity primary key
+	, StudentId int not null references Student(Id)
+)
 
 select * from Groups
 select * from Student
 select * from Subjects
 select * from Groups_Subjects
 select * from Marks
+select * from Messages
 
-
+drop table Messages
 drop table Marks
 drop table Groups_Subjects
 drop table Subjects
 drop table Student
 drop table Groups
+

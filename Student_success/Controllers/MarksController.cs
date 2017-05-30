@@ -9,7 +9,7 @@ namespace Student_success.Controllers
 {
     public class MarksController : Controller
     {
-        private Model1 db = new Model1();
+        private StudentSucessContext db = new StudentSucessContext();
 
         // GET: Marks
         public ActionResult Index()
@@ -38,6 +38,8 @@ namespace Student_success.Controllers
         {
             ViewBag.StudentId = new SelectList(db.Students, "Id", "Name");
             ViewBag.SubjectsId = new SelectList(db.Subjects, "Id", "Name");
+        //    ViewBag.Groups_SubjectsID = new SelectList(db.Groups_Subjects, "Id", "Name");
+            ViewBag.GrousdId = new SelectList(db.Groups, "Id", "Name");
             return View();
         }
 

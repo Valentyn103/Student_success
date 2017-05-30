@@ -8,7 +8,7 @@ namespace Student_success.Controllers
 {
     public class Groups_SubjectsController : Controller
     {
-        private Model1 db = new Model1();
+        private StudentSucessContext db = new StudentSucessContext();
 
         // GET: Groups_Subjects
         public ActionResult Index()

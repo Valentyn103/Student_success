@@ -1,0 +1,26 @@
+﻿
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="control-label col-md-2">Balance</label>
+        <div class="col-md-10">
+            <pre>@Html.Raw(Html.Encode(@ViewData["Balance"]))</pre>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-2">Price</label>
+        <div class="col-md-10">
+            <pre>@Html.Raw(Html.Encode(@ViewData["Price"]))</pre>
+        </div>
+    </div>
+    <div class="form-group">
+        <label class="control-label col-md-2">Status</label>
+        <div class="col-md-10">
+            <pre>@Html.Raw(Html.Encode(@ViewData["Status"]))</pre>
+        </div>
+    </div>
+</div>

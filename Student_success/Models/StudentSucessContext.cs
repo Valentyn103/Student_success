@@ -5,16 +5,17 @@ namespace Student_success.Models
     using System.ComponentModel.DataAnnotations.Schema;
     using System.Linq;
 
-    public partial class Model1 : DbContext
+    public partial class StudentSucessContext : DbContext
     {
-        public Model1()
-            : base("name=Model1")
+        public StudentSucessContext()
+            : base("name=StudentSucessContext")
         {
         }
 
         public virtual DbSet<Group> Groups { get; set; }
         public virtual DbSet<Groups_Subjects> Groups_Subjects { get; set; }
         public virtual DbSet<Mark> Marks { get; set; }
+        public virtual DbSet<Message> Messages { get; set; }
         public virtual DbSet<Student> Students { get; set; }
         public virtual DbSet<Subject> Subjects { get; set; }
 
@@ -34,6 +35,11 @@ namespace Student_success.Models
 
             modelBuilder.Entity<Student>()
                 .HasMany(e => e.Marks)
+                .WithRequired(e => e.Student)
+                .WillCascadeOnDelete(false);
+
+            modelBuilder.Entity<Student>()
+                .HasMany(e => e.Messages)
                 .WithRequired(e => e.Student)
                 .WillCascadeOnDelete(false);
 

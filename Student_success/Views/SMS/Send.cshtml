@@ -1,0 +1,15 @@
+﻿
+@{
+    ViewBag.Title = "Send";
+}
+
+<h2>Send</h2>
+
+<div class="form-horizontal">
+    <div class="form-group">
+        <label class="control-label col-md-2">Status : </label>
+        <div class="col-md-10">
+            <pre>@Html.Raw(Html.Encode(@ViewData["Status"]))</pre>
+        </div>
+    </div>
+</div>

@@ -9,7 +9,7 @@ namespace Student_success.Controllers
 {
     public class GroupsController : Controller
     {
-        private Model1 db = new Model1();
+        private StudentSucessContext db = new StudentSucessContext();
 
         // GET: Groups
         public ActionResult Index()

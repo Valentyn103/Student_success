@@ -13,6 +13,7 @@ namespace Student_success.Models
         public Student()
         {
             Marks = new HashSet<Mark>();
+            Messages = new HashSet<Message>();
         }
 
         public int Id { get; set; }
@@ -35,5 +36,8 @@ namespace Student_success.Models
 
         [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
         public virtual ICollection<Mark> Marks { get; set; }
+
+        [System.Diagnostics.CodeAnalysis.SuppressMessage("Microsoft.Usage", "CA2227:CollectionPropertiesShouldBeReadOnly")]
+        public virtual ICollection<Message> Messages { get; set; }
     }
 }
