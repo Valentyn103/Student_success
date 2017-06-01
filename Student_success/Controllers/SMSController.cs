@@ -1,4 +1,4 @@
-﻿using System;
+using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
@@ -76,8 +76,19 @@ namespace Student_success.Controllers
                 db.Messages.Add(messages[i]);
             }
             db.SaveChanges();
+            string marks;
             for (int i = 0; i < messages.Count; i++)
-                res += "<number messageID=\"" + messages[i].Id + "\">" + students[i].Number + "</number>\n";
+            {
+                marks = "";
+                for (int j = 0; j < students[i].Marks.Count; j++)
+                {
+                    var listmark =students.ElementAt(j).Marks;
+                    marks += listmark.ElementAt(j).Subject.Name + ":" + listmark.ElementAt(j).Mark1 + ";";
+
+                }
+                res += "<number messageID=\"" + messages[i].Id + "\" variables=\"" + students[i].Name + "; "+ marks +" \">";
+                res += students[i].Number + "</number>\n";
+            }
             var XML = "XML=<?xml version=\"1.0\" encoding=\"UTF-8\"?>\n" +  //Making XML for send sms
                   "<SMS>\n" +
                   "<operations>\n" +
@@ -88,8 +99,8 @@ namespace Student_success.Controllers
                       "<password>" + Class1.password + "</password>\n" +
                   "</authentification>\n" +
                   "<message>\n" +
-                  "<sender>Valentyn</sender>\n" + 
-                  "<text>Test message</text>\n" +
+                  "<sender>Valentyn</sender>\n" +
+                  "<text><![CDATA[Hello %1%, your marks : %2%]]></text>\n" +
                   "</message>\n" +
                   "<numbers>\n" +
                       res +
@@ -128,7 +139,7 @@ namespace Student_success.Controllers
             try
             {
                 HttpWebRequest request = WebRequest.Create("http://api.atompark.com/members/sms/xml.php") as HttpWebRequest;
-                request.Method = "Post";                                        
+                request.Method = "Post";
                 request.ContentType = "application/x-www-form-urlencoded";
                 ASCIIEncoding encoding = new ASCIIEncoding();
                 byte[] data = encoding.GetBytes(XML);
